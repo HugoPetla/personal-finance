@@ -1,6 +1,63 @@
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>My Personal Finance</title>
+    <link rel="icon" href="./public/money-bag.png" type="image/x-icon" />
+  </head>
   <script>
-    console.log("Hello World - Primeiros passos na programação");
+    function calculateTotal(salary, ...rest) {
+      return (
+        salary -
+        rest.reduce(
+          (accumulator, currentValue) => accumulator + currentValue,
+          0
+        )
+      );
+    }
+
+    salary = 3000;
+    rent = 1000;
+    waterBill = 200;
+    lightBill = 100;
+    internetBill = 100;
+    transport = 300;
+    funValue = 300;
+    foodValue = 500;
+    totalJanuary = calculateTotal(
+      salary,
+      rent,
+      lightBill,
+      waterBill,
+      internetBill,
+      transport,
+      funValue,
+      foodValue
+    );
+    isBallanceNegative = totalJanuary < 0;
+    console.log(isBallanceNegative ? "Balance negative" : "Balance positive");
+
+    salary = 3000;
+    rent = 1200;
+    waterBill = 250;
+    lightBill = 100;
+    internetBill = 100;
+    transport = 500;
+    funValue = 0;
+    foodValue = 1000;
+    totalFebruary = calculateTotal(
+      salary,
+      rent,
+      lightBill,
+      waterBill,
+      internetBill,
+      transport,
+      funValue,
+      foodValue
+    );
+    isBallanceNegative = totalFebruary < 0;
+    console.log(isBallanceNegative ? "Balance negative" : "Balance positive");
+
+    console.log(totalJanuary + totalFebruary);
   </script>
   <body>
     <h1>Hello World Html</h1>
