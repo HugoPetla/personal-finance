@@ -5,6 +5,18 @@
     <link rel="icon" href="./public/money-bag.png" type="image/x-icon" />
   </head>
   <script>
+    class BankPosting {
+      constructor(category, type, value) {
+        if (type !== "income" && type !== "expense")
+          throw new Error("Invalid type");
+        if (value < 0) throw new Error("Invalid value");
+        if (category === "") throw new Error("Invalid category");
+        this.category = category;
+        this.type = type;
+        this.value = value;
+      }
+    }
+
     function roundValues(value) {
       return Math.round(value * 100) / 100;
     }
@@ -17,56 +29,91 @@
       return roundValues(salary * 0.005);
     }
 
-    function calculateBalance(bankPosting) {
-      balance = bankPosting.reduce((accumulator, currentValue) => {
+    function calculateDistributionOfFees(bankPostings, total) {
+      feeDistribution = [];
+      for (bankPost of bankPostings) {
+        if (bankPost.type === "expense") {
+          percentage = roundValues((bankPost.value / total) * 100);
+          feeDistribution.push({
+            category: bankPost.category,
+            percentage
+          });
+        }
+      }
+      return feeDistribution;
+    }
+
+    function calculateBalance(inicialBalance, bankPostings) {
+      totalizer = {
+        balance: 0,
+        inicialBalance,
+        totalIncome: 0,
+        totalExpense: 0,
+        income: 0,
+        fees: 0,
+        feeDistribution: []
+      };
+      totalizer.balance = bankPostings.reduce((accumulator, currentValue) => {
         if (currentValue.type === "expense") {
+          totalizer.totalExpense += currentValue.value;
           return accumulator - currentValue.value;
         }
         if (currentValue.type === "income") {
+          totalizer.totalIncome += currentValue.value;
           return accumulator + currentValue.value;
         }
-      }, 0);
+      }, inicialBalance);
 
-      isBallanceNegative = balance < 0;
+      totalizer.feeDistribution = calculateDistributionOfFees(
+        bankPostings,
+        totalizer.totalExpense
+      );
+
+      isBallanceNegative = totalizer.balance < 0;
       if (isBallanceNegative) {
-        fees = calculateFee(balance);
-        balance = balance + fees;
+        fees = calculateFee(totalizer.balance);
+        totalizer.fees = fees;
+        totalizer.balance += fees;
       }
       if (!isBallanceNegative) {
-        income = calculateIncome(balance);
-        balance = balance + income;
+        income = calculateIncome(totalizer.balance);
+        totalizer.income = income;
+        totalizer.balance += income;
       }
-      return roundValues(balance);
+      totalizer.balance = roundValues(totalizer.balance);
+      return totalizer;
     }
 
     januaryBankPosting = [
-      { category: "Salary", type: "income", value: 3000 },
-      { category: "Rent", type: "expense", value: 1000 },
-      { category: "Light bill", type: "expense", value: 200 },
-      { category: "Water bill", type: "expense", value: 100 },
-      { category: "Internet", type: "expense", value: 100 },
-      { category: "Trnasport", type: "expense", value: 300 },
-      { category: "Food", type: "expense", value: 500 },
-      { category: "Fun", type: "expense", value: 300 }
+      new BankPosting("Salary", "income", 3000),
+      new BankPosting("Rent", "expense", 1000),
+      new BankPosting("Light bill", "expense", 200),
+      new BankPosting("Water bill", "expense", 100),
+      new BankPosting("Internet", "expense", 100),
+      new BankPosting("Transport", "expense", 300),
+      new BankPosting("Food", "expense", 500),
+      new BankPosting("Fun", "expense", 300)
     ];
-    totalJanuary = calculateBalance(januaryBankPosting);
+    totalizerJanuary = calculateBalance(0, januaryBankPosting);
 
-    console.log(totalJanuary);
+    console.log(totalizerJanuary);
 
     februaryBankPosting = [
-      { category: "Bank", type: "income", value: totalJanuary },
-      { category: "Salary", type: "income", value: 3000 },
-      { category: "Rent", type: "expense", value: 1200 },
-      { category: "Ligth bill", type: "expense", value: 250 },
-      { category: "Water bill", type: "expense", value: 100 },
-      { category: "Internet", type: "expense", value: 100 },
-      { category: "Fun", type: "expense", value: 500 },
-      { category: "Food", type: "expense", value: 1000 }
+      new BankPosting("Salary", "income", 3000),
+      new BankPosting("Rent", "expense", 1200),
+      new BankPosting("Ligth bill", "expense", 250),
+      new BankPosting("Water bill", "expense", 100),
+      new BankPosting("Internet", "expense", 100),
+      new BankPosting("Fun", "expense", 500),
+      new BankPosting("Food", "expense", 1000)
     ];
 
-    totalFebruary = calculateBalance(februaryBankPosting);
+    totalizerFebruary = calculateBalance(
+      totalizerJanuary.balance,
+      februaryBankPosting
+    );
 
-    console.log(totalFebruary);
+    console.log(totalizerFebruary);
   </script>
   <body>
     <h1>Hello World Html</h1>
