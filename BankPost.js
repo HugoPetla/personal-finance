@@ -1,4 +1,4 @@
-class BankPosting {
+class BankPost {
   constructor(category, type, value) {
     if (type !== "income" && type !== "expense")
       throw new Error("Invalid type");

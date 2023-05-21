@@ -1,26 +1,32 @@
 class Month {
-  constructor(name, inicialBalance) {
+  constructor(name) {
     if (name === "") throw new Error("Invalid month");
 
     this.name = name;
-    this.inicialBalance = inicialBalance;
+    this.inicialBalance = 0;
     this.totalizer = {
       balance: 0,
-      inicialBalance,
       totalIncome: 0,
       totalExpense: 0,
       income: 0,
       fees: 0,
       feeDistribution: []
     };
-    this.bankPostings = [];
+    this.bankPosts = [];
   }
 
   calculateBalance() {
     console.log(this.name);
-
-    this.totalizer.balance = this.roundValues(
-      this.bankPostings.reduce((accumulator, currentValue) => {
+    this.totalizer = {
+      balance: 0,
+      totalIncome: 0,
+      totalExpense: 0,
+      income: 0,
+      fees: 0,
+      feeDistribution: []
+    };
+    this.totalizer.balance = roundValues(
+      this.bankPosts.reduce((accumulator, currentValue) => {
         if (currentValue.type === "expense") {
           this.totalizer.totalExpense += currentValue.value;
           return accumulator - currentValue.value;
@@ -29,7 +35,7 @@ class Month {
           this.totalizer.totalIncome += currentValue.value;
           return accumulator + currentValue.value;
         }
-      }, this.totalizer.inicialBalance)
+      }, this.inicialBalance)
     );
 
     this.calculateDistributionOfFees();
@@ -38,12 +44,12 @@ class Month {
   }
 
   addBankPost(bankPost) {
-    this.bankPostings.push(bankPost);
+    this.bankPosts.push(bankPost);
   }
 
   calculateDistributionOfFees() {
     const feeDistribution = [];
-    for (const bankPost of this.bankPostings) {
+    for (const bankPost of this.bankPosts) {
       if (bankPost.type === "expense") {
         const percentage = roundValues(
           (bankPost.value / this.totalizer.totalExpense) * 100
@@ -67,7 +73,7 @@ class Month {
 
   gatherFee() {
     if (this.totalizer.balance < 0) {
-      fees = this.calculateFee(this.totalizer.balance);
+      const fees = this.calculateFee(this.totalizer.balance);
       this.totalizer.fees = fees;
       this.totalizer.balance += fees;
     }
