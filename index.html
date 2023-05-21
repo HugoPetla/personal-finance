@@ -5,14 +5,37 @@
     <link rel="icon" href="./public/money-bag.png" type="image/x-icon" />
   </head>
   <script>
-    function calculateTotal(salary, ...rest) {
-      return (
+    function roundValues(value) {
+      return Math.round(value * 100) / 100;
+    }
+
+    function calculateFee(salary) {
+      return roundValue(salary * 0.1);
+    }
+
+    function calculateIncome(salary) {
+      return roundValues(salary * 0.005);
+    }
+
+    function calculateBalance(inicialSalary, salary, ...rest) {
+      balance =
+        inicialSalary +
         salary -
         rest.reduce(
           (accumulator, currentValue) => accumulator + currentValue,
           0
-        )
-      );
+        );
+
+      isBallanceNegative = balance < 0;
+      if (isBallanceNegative) {
+        fees = calculateFee(balance);
+        balance = balance + fees;
+      }
+      if (!isBallanceNegative) {
+        income = calculateIncome(balance);
+        balance = balance + income;
+      }
+      return roundValue(balance);
     }
 
     salary = 3000;
@@ -23,7 +46,8 @@
     transport = 300;
     funValue = 300;
     foodValue = 500;
-    totalJanuary = calculateTotal(
+    totalJanuary = calculateBalance(
+      0,
       salary,
       rent,
       lightBill,
@@ -33,8 +57,8 @@
       funValue,
       foodValue
     );
-    isBallanceNegative = totalJanuary < 0;
-    console.log(isBallanceNegative ? "Balance negative" : "Balance positive");
+
+    console.log(totalJanuary);
 
     salary = 3000;
     rent = 1200;
@@ -44,7 +68,8 @@
     transport = 500;
     funValue = 0;
     foodValue = 1000;
-    totalFebruary = calculateTotal(
+    totalFebruary = calculateBalance(
+      totalJanuary,
       salary,
       rent,
       lightBill,
@@ -54,10 +79,8 @@
       funValue,
       foodValue
     );
-    isBallanceNegative = totalFebruary < 0;
-    console.log(isBallanceNegative ? "Balance negative" : "Balance positive");
 
-    console.log(totalJanuary + totalFebruary);
+    console.log(totalFebruary);
   </script>
   <body>
     <h1>Hello World Html</h1>
