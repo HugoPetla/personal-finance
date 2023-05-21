@@ -10,21 +10,22 @@
     }
 
     function calculateFee(salary) {
-      return roundValue(salary * 0.1);
+      return roundValues(salary * 0.1);
     }
 
     function calculateIncome(salary) {
       return roundValues(salary * 0.005);
     }
 
-    function calculateBalance(inicialSalary, salary, ...rest) {
-      balance =
-        inicialSalary +
-        salary -
-        rest.reduce(
-          (accumulator, currentValue) => accumulator + currentValue,
-          0
-        );
+    function calculateBalance(bankPosting) {
+      balance = bankPosting.reduce((accumulator, currentValue) => {
+        if (currentValue.type === "expense") {
+          return accumulator - currentValue.value;
+        }
+        if (currentValue.type === "income") {
+          return accumulator + currentValue.value;
+        }
+      }, 0);
 
       isBallanceNegative = balance < 0;
       if (isBallanceNegative) {
@@ -35,50 +36,35 @@
         income = calculateIncome(balance);
         balance = balance + income;
       }
-      return roundValue(balance);
+      return roundValues(balance);
     }
 
-    salary = 3000;
-    rent = 1000;
-    waterBill = 200;
-    lightBill = 100;
-    internetBill = 100;
-    transport = 300;
-    funValue = 300;
-    foodValue = 500;
-    totalJanuary = calculateBalance(
-      0,
-      salary,
-      rent,
-      lightBill,
-      waterBill,
-      internetBill,
-      transport,
-      funValue,
-      foodValue
-    );
+    januaryBankPosting = [
+      { category: "Salary", type: "income", value: 3000 },
+      { category: "Rent", type: "expense", value: 1000 },
+      { category: "Light bill", type: "expense", value: 200 },
+      { category: "Water bill", type: "expense", value: 100 },
+      { category: "Internet", type: "expense", value: 100 },
+      { category: "Trnasport", type: "expense", value: 300 },
+      { category: "Food", type: "expense", value: 500 },
+      { category: "Fun", type: "expense", value: 300 }
+    ];
+    totalJanuary = calculateBalance(januaryBankPosting);
 
     console.log(totalJanuary);
 
-    salary = 3000;
-    rent = 1200;
-    waterBill = 250;
-    lightBill = 100;
-    internetBill = 100;
-    transport = 500;
-    funValue = 0;
-    foodValue = 1000;
-    totalFebruary = calculateBalance(
-      totalJanuary,
-      salary,
-      rent,
-      lightBill,
-      waterBill,
-      internetBill,
-      transport,
-      funValue,
-      foodValue
-    );
+    februaryBankPosting = [
+      { category: "Bank", type: "income", value: totalJanuary },
+      { category: "Salary", type: "income", value: 3000 },
+      { category: "Rent", type: "expense", value: 1200 },
+      { category: "Ligth bill", type: "expense", value: 250 },
+      { category: "Water bill", type: "expense", value: 100 },
+      { category: "Internet", type: "expense", value: 100 },
+      { category: "Fun", type: "expense", value: 500 },
+      { category: "Food", type: "expense", value: 1000 }
+    ];
+
+    totalFebruary = calculateBalance(februaryBankPosting);
 
     console.log(totalFebruary);
   </script>
