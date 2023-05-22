@@ -8,7 +8,7 @@ You have two options to run the application: directly opening the index.html fil
 
 ### Option 1: Opening the Application in the Browser
 
-- Locate the index.html file in your project directory (/home/hugo/projetos/estudos/branas/).
+- Locate the index.html file in your project directory (/home/{your-user}/projects/personal-finance/).
 - Double-click the index.html file to open it in your default web browser.
 - The application should load and be ready to use.
 
@@ -18,7 +18,7 @@ You have two options to run the application: directly opening the index.html fil
 - Navigate to the project directory using the cd command. In your case, it would be:
 
 ```
-cd /home/hugo/projetos/estudos/branas/
+cd /home/{your-user}/projects/personal-finance/
 ```
 
 - Ensure that Node.js is installed by running the following command:
@@ -70,4 +70,4 @@ This application is inspired by the need for a simple financial management tool 
 
 If you have any questions or feedback regarding this project, you can reach out to the project maintainer at **hugopetla@gmail.com**.
 
-We hope you find this application helpful for your studies!
+I hope you find this application helpful for your studies!
