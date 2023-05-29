@@ -4,13 +4,59 @@
     <title>My Personal Finance</title>
     <link rel="icon" href="./public/money-bag.png" type="image/x-icon" />
   </head>
+  <style>
+    body {
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    input {
+      width: 100%;
+      height: 30px;
+      font-size: 15px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      border: 1px solid #ccc;
+    }
+
+    select {
+      width: 100%;
+      height: 30px;
+      font-size: 15px;
+      margin-bottom: 5px;
+      padding: 15px;
+    }
+
+    #form-bank-post {
+      position: fixed;
+      width: 200px;
+      right: 20;
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-indent: 4px;
+    }
+
+    button {
+      width: 100%;
+      height: 30px;
+      color: #fff;
+      background-color: #000;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
   <body>
     <h3>Personal Finances</h3>
-    <input id="month" type="text" placeholder="Month" />
-    <input id="category" type="text" placeholder="Category" />
-    <input id="bookPostType" type="text" placeholder="Type" />
-    <input id="value" type="number" placeholder="Value" />
-    <button id="addBankPost">Add new bank post</button>
+    <div id="form-bank-post">
+      <input id="month" type="text" placeholder="Month" />
+      <select id="bookPostType" placeholder="Type">
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+      </select>
+      <input id="category" type="text" placeholder="Category" />
+      <input id="value" type="number" placeholder="Value" />
+      <br />
+      <button id="button-add-bank-post">Add new bank post</button>
+    </div>
     <div id="app"></div>
     <script src="BankPost.js"></script>
     <script src="Month.js"></script>
